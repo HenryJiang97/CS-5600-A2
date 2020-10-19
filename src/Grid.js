@@ -10,6 +10,7 @@ class Grid extends Component {
     }
 
     render() {
+        // Create every column and row for the grid
         const column = []
         for (let i = 0; i < this.props.width; i++) {
             column.push(<Cell />);

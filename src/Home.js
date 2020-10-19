@@ -37,6 +37,7 @@ class Home extends Component {
                     <input placeholder='Height' onChange={this.setHeight}></input>
                     <input placeholder='Width' onChange={this.setWidth}></input>
                     <button onClick={this.handleClick}>Create Grid</button>
+                    <p>Restriction: 10 x 10 to 100 x 100</p>
                 </div>
             );
         } else {
