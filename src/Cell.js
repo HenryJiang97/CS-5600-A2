@@ -5,12 +5,25 @@ import './Cell.css';
 class Cell extends Component {
     constructor(props) {
         super(props);
-        this.state = {alive: Math.floor(Math.random() * 2) == 0 ? true : false}
+        this.state = {
+            alive: this.getAliveState()
+        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    // Get cell alive state from props
+    getAliveState() {
+        return this.props.alive;
+    }
+
+    // Change alive state when clicking on cell
+    handleClick() {
+        this.setState({alive: this.state.alive ? false : true});
     }
 
     render () {
         return (
-            <div className='Cell' style={{backgroundColor: this.state.alive ? "black" : "white"}}/>
+            <div className='Cell' style={{backgroundColor: this.state.alive ? "black" : "white"}} onClick={this.handleClick}/>
         );
     }
 }

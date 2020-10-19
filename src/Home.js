@@ -15,6 +15,7 @@ class Home extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.setWidth = this.setWidth.bind(this);
         this.setHeight = this.setHeight.bind(this);
+        this.handleReturnClick = this.handleReturnClick.bind(this);
     }
 
     handleClick() {
@@ -29,10 +30,24 @@ class Home extends Component {
         this.setState({height: evt.target.value});
     }
 
+    refreshPage() {
+        window.location.reload(false);
+    }
+
+    handleReturnClick() {
+        this.setState({page: "input"});
+    }
+
+    handleRefreshClick() {
+        this.setState({page: "input"});
+        this.setState({page: "grid"});
+    }
+
     render() {
         if (this.state.page === "input") {
             return (
                 <div>
+                    <h1>Conway’s History of Life</h1>
                     <h3>Grid dimension</h3>
                     <input placeholder='Height' onChange={this.setHeight}></input>
                     <input placeholder='Width' onChange={this.setWidth}></input>
@@ -43,7 +58,13 @@ class Home extends Component {
         } else {
             return (
                 <div>
-                    <Grid width={this.state.width} height={this.state.height}/>
+                    <h1>Conway’s History of Life</h1>
+                    <Grid 
+                        width={this.state.width}
+                        height={this.state.height}
+                        return={()=>this.handleReturnClick()}
+                        refresh={()=>this.handleRefreshClick()}
+                    />
                 </div>                
             );
         }

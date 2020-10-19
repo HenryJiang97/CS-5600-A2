@@ -12,3 +12,7 @@
 .Cell {
     display : table-cell;
 }
+
+Button {
+    font-size: 18px;
+}
