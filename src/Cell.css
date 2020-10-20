@@ -1,5 +1,5 @@
 .Cell {
-    height: 100px;
-    width: 100px;
-    border: 10px solid rgb(199, 195, 195);
+    height: 50px;
+    width: 50px;
+    border: 5px solid rgb(199, 195, 195);
 }
