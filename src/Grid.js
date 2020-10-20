@@ -11,8 +11,10 @@ class Grid extends Component {
             arr: this.buildArray()
         };
         this.update();
+
         this.handleStartClick = this.handleStartClick.bind(this);
         this.handlePauseClick = this.handlePauseClick.bind(this);
+        this.handleResetClick = this.handleResetClick.bind(this);
         this.updateGrid = this.updateGrid.bind(this);
         this.update = this.update.bind(this);
     }
@@ -107,7 +109,7 @@ class Grid extends Component {
     }
 
     handleResetClick() {
-        
+        this.setState({state: "start", arr: this.buildArray()});
     }
 
     render() {
