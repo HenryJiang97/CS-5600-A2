@@ -7,6 +7,7 @@ class Grid extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            global_time: 0,
             state: "start",
             arr: this.buildArray()
         };
@@ -21,12 +22,19 @@ class Grid extends Component {
 
     // Build JSX grid
     buildGrid(arr) {
-        console.log(arr[0][0]);
         let grid = [];
         for (let i = 0; i < arr.length; i++) {
             let row = [];
             for (let j = 0; j < arr[0].length; j++) {
-                row.push(<Cell alive={arr[i][j]} i={i} j={j} flipCell={(x, y) => this.flipCell(x, y)}/>)
+                row.push(<Cell 
+                            alive={arr[i][j].alive}
+                            global_time={this.state === undefined ? parseInt(0) : parseInt(this.state.global_time)}
+                            time={arr[i][j].time}
+                            frequency={this.props.frequency}
+                            i={i}
+                            j={j}
+                            flipCell={(x, y) => this.flipCell(x, y)}
+                        />);
             }
             grid.push(
                 <div className="Row">
@@ -46,7 +54,7 @@ class Grid extends Component {
             for (let j = 0; j < n; j++) {
                 let rand = Math.floor(Math.random() * 2);
                 let alive = rand === 1 ? true : false;
-                row.push(alive);
+                row.push({alive: alive, time: alive ? (this.state === undefined ? parseInt(0) : parseInt(this.state.global_time)) : 0});
             }
             arr.push(row);
         }
@@ -59,7 +67,12 @@ class Grid extends Component {
     // Flip cell state
     flipCell(i, j) {
         let arr = this.state.arr.arr;
-        arr[i][j] = arr[i][j] ? false : true;
+
+        arr[i][j].alive = arr[i][j].alive ? false : true;
+        if (arr[i][j].alive == true) {
+            arr[i][j].time = this.state === undefined ? parseInt(0) : parseInt(this.state.global_time);
+        }
+
         let grid = this.buildGrid(arr);
         this.setState({arr: {arr: arr, grid: grid}});
     }
@@ -76,13 +89,16 @@ class Grid extends Component {
                 for (let d in dir) {
                     let ni = i + dir[d][0], nj = j + dir[d][1];
                     if (ni < 0 || nj < 0 || ni >= m || nj >= n)    continue;
-                    if (arr[ni][nj])    cnt++;
+                    if (arr[ni][nj].alive)    cnt++;
                 }
 
-                if (arr[i][j]) {    // Current cell alive
-                    if (cnt < 2 || cnt > 3)    arr[i][j] = false;
+                if (arr[i][j].alive) {    // Current cell alive
+                    if (cnt < 2 || cnt > 3)    arr[i][j].alive = false;
                 } else {    // Current cell dead
-                    if (cnt === 3)    arr[i][j] = true;
+                    if (cnt === 3) {
+                        arr[i][j].alive = true;
+                        arr[i][j].time = this.state === undefined ? parseInt(0) : parseInt(this.state.global_time);
+                    }
                 }
             }
         }
@@ -96,8 +112,11 @@ class Grid extends Component {
         setInterval(() => {
             if (this.state.state === "start") {
                 this.updateGrid();
+                console.log(this.state.global_time);
+                this.setState({global_time: this.state === undefined ? parseInt(0) : parseInt(this.state.global_time) + parseInt(this.props.frequency)});
+                console.log(this.state.global_time);
             }
-        }, 2000);
+        }, this.props.frequency);
     }
 
     handleStartClick() {

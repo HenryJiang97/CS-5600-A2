@@ -9,12 +9,14 @@ class Home extends Component {
         this.state = {
             page: "input",
             width: 0,
-            height: 0
+            height: 0,
+            frequency: 2000
         };
 
         this.handleClick = this.handleClick.bind(this);
         this.setWidth = this.setWidth.bind(this);
         this.setHeight = this.setHeight.bind(this);
+        this.setFrequency = this.setFrequency.bind(this);
         this.handleReturnClick = this.handleReturnClick.bind(this);
     }
 
@@ -28,6 +30,10 @@ class Home extends Component {
     
     setHeight(evt) {
         this.setState({height: evt.target.value});
+    }
+
+    setFrequency(evt) {
+        this.setState({frequency: evt.target.value});
     }
 
     refreshPage() {
@@ -51,8 +57,9 @@ class Home extends Component {
                     <h3>Grid dimension</h3>
                     <input placeholder='Height' onChange={this.setHeight}></input>
                     <input placeholder='Width' onChange={this.setWidth}></input>
+                    <input placeholder='Frequency' onChange={this.setFrequency}></input>
                     <button onClick={this.handleClick}>Create Grid</button>
-                    <p>Restriction: 10 x 10 to 100 x 100</p>
+                    <p>Restriction: Dimension(10 x 10 to 100 x 100), Frequency(50ms to 2000ms)</p>
                 </div>
             );
         } else {
@@ -62,6 +69,7 @@ class Home extends Component {
                     <Grid 
                         width={this.state.width}
                         height={this.state.height}
+                        frequency={this.state.frequency}
                         return={()=>this.handleReturnClick()}
                         refresh={()=>this.handleRefreshClick()}
                     />
