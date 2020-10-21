@@ -7,7 +7,7 @@ class Grid extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            global_time: 0,
+            global_time: parseInt(20000),
             state: "start",
             arr: this.buildArray()
         };
@@ -28,9 +28,9 @@ class Grid extends Component {
             for (let j = 0; j < arr[0].length; j++) {
                 row.push(<Cell 
                             alive={arr[i][j].alive}
-                            global_time={this.state === undefined ? parseInt(0) : parseInt(this.state.global_time)}
+                            global_time={this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time)}
                             time={arr[i][j].time}
-                            frequency={this.props.frequency}
+                            frequency={parseInt(this.props.frequency)}
                             i={i}
                             j={j}
                             flipCell={(x, y) => this.flipCell(x, y)}
@@ -54,7 +54,7 @@ class Grid extends Component {
             for (let j = 0; j < n; j++) {
                 let rand = Math.floor(Math.random() * 2);
                 let alive = rand === 1 ? true : false;
-                row.push({alive: alive, time: alive ? (this.state === undefined ? parseInt(0) : parseInt(this.state.global_time)) : 0});
+                row.push({alive: alive, time: alive ? (this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time)) : 0});
             }
             arr.push(row);
         }
@@ -70,7 +70,7 @@ class Grid extends Component {
 
         arr[i][j].alive = arr[i][j].alive ? false : true;
         if (arr[i][j].alive == true) {
-            arr[i][j].time = this.state === undefined ? parseInt(0) : parseInt(this.state.global_time);
+            arr[i][j].time = this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time);
         }
 
         let grid = this.buildGrid(arr);
@@ -82,9 +82,12 @@ class Grid extends Component {
         const dir = [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
         const m = this.props.height, n = this.props.width;
         let arr = this.state.arr.arr;
+        let newArr = [];
 
         for (let i = 0; i < m; i++) {
+            let newRow = [];
             for (let j = 0; j < n; j++) {
+                // Get number of alive cells around current cell
                 let cnt = 0;
                 for (let d in dir) {
                     let ni = i + dir[d][0], nj = j + dir[d][1];
@@ -93,30 +96,29 @@ class Grid extends Component {
                 }
 
                 if (arr[i][j].alive) {    // Current cell alive
-                    if (cnt < 2 || cnt > 3)    arr[i][j].alive = false;
+                    if (cnt < 2 || cnt > 3)    newRow.push({alive: false, time: arr[i][j].time});
+                    else    newRow.push({alive: arr[i][j].alive, time: arr[i][j].time});
                 } else {    // Current cell dead
-                    if (cnt === 3) {
-                        arr[i][j].alive = true;
-                        arr[i][j].time = this.state === undefined ? parseInt(0) : parseInt(this.state.global_time);
-                    }
+                    if (cnt === 3)    newRow.push({alive: true, time: this.state.global_time});
+                    else    newRow.push({alive: arr[i][j].alive, time: arr[i][j].time});
                 }
             }
+            newArr.push(newRow);
         }
 
-        let grid = this.buildGrid(arr);
-        this.setState({arr: {arr: arr, grid: grid}});
+        let grid = this.buildGrid(newArr);
+        this.setState({arr: {arr: newArr, grid: grid}});
     }
 
     // Update the grid once every 2s
     update() {
         setInterval(() => {
             if (this.state.state === "start") {
+                this.setState({global_time: this.state === undefined ? 20000 : this.state.global_time + parseInt(this.props.frequency)});
+                console.log(this.state.global_time);
                 this.updateGrid();
-                console.log(this.state.global_time);
-                this.setState({global_time: this.state === undefined ? parseInt(0) : parseInt(this.state.global_time) + parseInt(this.props.frequency)});
-                console.log(this.state.global_time);
             }
-        }, this.props.frequency);
+        }, parseInt(this.props.frequency));
     }
 
     handleStartClick() {
