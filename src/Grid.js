@@ -34,6 +34,8 @@ class Grid extends Component {
                             i={i}
                             j={j}
                             flipCell={(x, y) => this.flipCell(x, y)}
+                            x={this.props.height}
+                            y={this.props.width}                       
                         />);
             }
             grid.push(
@@ -49,11 +51,15 @@ class Grid extends Component {
     buildArray() {
         const m = this.props.height, n = this.props.width;
         let arr = []
+        let count = 0;
         for (let i = 0; i < m; i++) {
             let row = [];
             for (let j = 0; j < n; j++) {
                 let rand = Math.floor(Math.random() * 2);
                 let alive = rand === 1 ? true : false;
+                if(alive){
+                    count++;
+                }
                 row.push({alive: alive, time: alive ? (this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time)) : 0});
             }
             arr.push(row);
@@ -61,21 +67,27 @@ class Grid extends Component {
         
         let grid = this.buildGrid(arr);
 
-        return {arr: arr, grid: grid};
+        return {arr: arr, grid: grid, count: count};
     }
 
     // Flip cell state
     flipCell(i, j) {
         let arr = this.state.arr.arr;
-
-        if (this.state.state === "stop") {
-            arr[i][j].alive = arr[i][j].alive ? false : true;
-            if (arr[i][j].alive == true) {
+        let count = this.state.arr.count;
+        if(this.state.state === 'stop'){
+            let wasAlive = arr[i][j].alive;
+            arr[i][j].alive = wasAlive ? false : true;
+            if (arr[i][j].alive === true) {
+                if(!wasAlive) count++;
                 arr[i][j].time = this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time);
+            }else{
+                if(wasAlive) count--;
             }
+
             let grid = this.buildGrid(arr);
-            this.setState({arr: {arr: arr, grid: grid}});
+            this.setState({arr: {arr: arr, grid: grid, count: count}});
         }
+        
     }
 
     // Update grid over time
@@ -84,7 +96,7 @@ class Grid extends Component {
         const m = this.props.height, n = this.props.width;
         let arr = this.state.arr.arr;
         let newArr = [];
-
+        let count = this.state.arr.count;
         for (let i = 0; i < m; i++) {
             let newRow = [];
             for (let j = 0; j < n; j++) {
@@ -97,18 +109,27 @@ class Grid extends Component {
                 }
 
                 if (arr[i][j].alive) {    // Current cell alive
-                    if (cnt < 2 || cnt > 3)    newRow.push({alive: false, time: arr[i][j].time});
-                    else    newRow.push({alive: arr[i][j].alive, time: arr[i][j].time});
+                    if (cnt < 2 || cnt > 3){
+                        newRow.push({alive: false, time: arr[i][j].time});
+                        count--;
+                    }    
+                    else{
+                        newRow.push({alive: arr[i][j].alive, time: arr[i][j].time});
+                    }    
                 } else {    // Current cell dead
-                    if (cnt === 3)    newRow.push({alive: true, time: this.state.global_time});
-                    else    newRow.push({alive: arr[i][j].alive, time: arr[i][j].time});
+                    if (cnt === 3){
+                        newRow.push({alive: true, time: this.state.global_time});
+                        count++;
+                    }    
+                    else{
+                        newRow.push({alive: arr[i][j].alive, time: arr[i][j].time});
+                    }   
                 }
             }
             newArr.push(newRow);
         }
-
         let grid = this.buildGrid(newArr);
-        this.setState({arr: {arr: newArr, grid: grid}});
+        this.setState({arr: {arr: newArr, grid: grid, count: count}});
     }
 
     // Update the grid once every 2s
@@ -138,18 +159,15 @@ class Grid extends Component {
         
         return (
             <div>
+                <div className = "Counter">Count: {this.state.arr.count}</div>
+                
+                <div><button className = "gridButton" onClick={this.props.return}>RETURN</button><button className = "gridButton2" onClick={this.handleStartClick}>START</button>
+                     <button className = "gridButton2" onClick={this.handlePauseClick}>PAUSE</button><button className = "gridButton" onClick={this.handleResetClick}>RESET</button>
+                </div>
+
                 <div className="Grid">
                     {this.state.arr.grid}
                 </div>
-                
-                <div><button onClick={this.props.return}>RETURN</button></div>
-
-                <div>
-                    <button onClick={this.handleStartClick}>START</button>
-                    <button onClick={this.handlePauseClick}>PAUSE</button>
-                </div>
-
-                <div><button onClick={this.handleResetClick}>RESET</button></div>
             </div>
             
         );
