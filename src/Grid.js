@@ -68,13 +68,14 @@ class Grid extends Component {
     flipCell(i, j) {
         let arr = this.state.arr.arr;
 
-        arr[i][j].alive = arr[i][j].alive ? false : true;
-        if (arr[i][j].alive == true) {
-            arr[i][j].time = this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time);
+        if (this.state.state === "stop") {
+            arr[i][j].alive = arr[i][j].alive ? false : true;
+            if (arr[i][j].alive == true) {
+                arr[i][j].time = this.state === undefined ? parseInt(20000) : parseInt(this.state.global_time);
+            }
+            let grid = this.buildGrid(arr);
+            this.setState({arr: {arr: arr, grid: grid}});
         }
-
-        let grid = this.buildGrid(arr);
-        this.setState({arr: {arr: arr, grid: grid}});
     }
 
     // Update grid over time
