@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import Grid from './Grid';
+import './Home.css'
 
 let WIDTH = 0;
 let HEIGHT = 0;
 let FREQ = 0;
+
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +24,7 @@ class Home extends Component {
         this.handleReturnClick = this.handleReturnClick.bind(this);
     }
 
+    // Validate input
     validInput() {
         if(WIDTH >= 10 && WIDTH <= 300 && HEIGHT >=10 && HEIGHT <= 300 && FREQ >=50 && FREQ  <= 2000){
             return "true";
@@ -50,8 +53,6 @@ class Home extends Component {
         }
         
     }
-
-    
 
     setWidth(evt) {
         WIDTH = evt.target.value;    

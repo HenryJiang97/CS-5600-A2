@@ -132,7 +132,7 @@ class Grid extends Component {
         this.setState({arr: {arr: newArr, grid: grid, count: count}});
     }
 
-    // Update the grid once every 2s
+    // Update the grid once every frequency
     update() {
         setInterval(() => {
             if (this.state.state === "start") {

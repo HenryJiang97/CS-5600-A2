@@ -1,14 +1,12 @@
 import React from 'react';
 import { Link, Route, Switch } from "react-router-dom";
+
 import './App.css';
-import Infos from "./Infos";
 import Home from './Home';
+import Infos from "./Infos";
 
 export default function App() {
   return (
-    // <div className="App">
-    //   <Home/>
-    // </div>
     <div className = "App">
       <nav className="navbar navbar">
         <ul className="nav navbar-nav">
