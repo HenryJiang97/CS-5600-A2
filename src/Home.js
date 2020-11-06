@@ -85,7 +85,7 @@ class Home extends Component {
                 <div className = "blurred-box1">
                     <div className="content">
                         <h1 className="title">Conway’s History of Life</h1>
-                        <h3>Grid dimension</h3>
+                        <h3 className="dimension">Grid dimension</h3>
                         <input placeholder='Height' onChange={this.setHeight}></input>
                         <input placeholder='Width' onChange={this.setWidth}></input>
                         <input placeholder='Frequency' onChange={this.setFrequency}></input>

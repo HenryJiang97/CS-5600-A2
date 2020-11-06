@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 
 import Cell from './Cell';
 import './Grid.css';
@@ -137,7 +137,6 @@ class Grid extends Component {
         setInterval(() => {
             if (this.state.state === "start") {
                 this.setState({global_time: this.state === undefined ? 20000 : this.state.global_time + parseInt(this.props.frequency)});
-                console.log(this.state.global_time);
                 this.updateGrid();
             }
         }, parseInt(this.props.frequency));
