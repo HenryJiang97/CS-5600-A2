@@ -26,11 +26,11 @@ class Home extends Component {
 
     // Validate input
     validInput() {
-        if(WIDTH >= 10 && WIDTH <= 300 && HEIGHT >=10 && HEIGHT <= 300 && FREQ >=50 && FREQ  <= 2000){
+        if(WIDTH >= 10 && WIDTH <= 100 && HEIGHT >=10 && HEIGHT <= 100 && FREQ >= 50 && FREQ <= 2000){
             return "true";
-        }else if(HEIGHT < 10 || HEIGHT > 300){
+        }else if(HEIGHT < 10 || HEIGHT > 100){
             return "HEIGHT";
-        }else if(WIDTH < 10 || WIDTH > 300){
+        }else if(WIDTH < 10 || WIDTH > 100){
             return "WIDTH";
         }else if(FREQ < 50 || FREQ  > 2000){
             return "FREQ";

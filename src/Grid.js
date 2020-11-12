@@ -87,7 +87,6 @@ class Grid extends Component {
             let grid = this.buildGrid(arr);
             this.setState({arr: {arr: arr, grid: grid, count: count}});
         }
-        
     }
 
     // Update grid over time
